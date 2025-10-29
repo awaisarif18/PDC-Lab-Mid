@@ -1,0 +1,58 @@
+[File: report.txt]
+
+Lab Examination Report
+Roll No: SP22-BCS-113
+Course: Parallel and Distributed Computing
+
+---
+### Task 1: Sequential Time
+Sequential Processing Time: 1.25 seconds 
+
+
+---
+### Task 2: Parallel Speedup Table [cite: 57]
+
+
+
+4 Processes Time: 0.44 s (Speedup: 1.05x)
+Running with 8 processes...
+8 Processes Time: 0.39 s (Speedup: 1.18x)
+
+==============================
+      Speedup Table
+==============================
+Workers  | Time (s)   | Speedup
+------------------------------
+1        | 0.46       | 1.00    x
+2        | 0.74       | 0.62    x
+4        | 0.44       | 1.05    x
+8        | 0.39       | 1.18    x
+==============================
+
+---
+### Task 3: Distributed Simulation Times [cite: 57]
+
+==============================
+      Distributed Simulation Summary
+==============================
+Node 1 processed 47 images in 0.2s
+Node 2 processed 47 images in 0.2s
+Total distributed time: 0.4s
+Efficiency: 41.17x over sequential
+==============================
+
+---
+
+### Analysis
+
+#### Best Number of Workers
+
+The best number of workers in my test was 8, as it produced the fastest execution time at 0.39 seconds.
+
+However, the speedup table shows that the benefit is extremely small (only 1.18x). The 2-worker test was actually slower than the 1-worker test (0.74s vs 0.46s). This indicates that the fixed overhead of creating and managing the worker processes is a significant cost. For 2 workers, this overhead cost was greater than any time saved by splitting the work. Only at 8 workers did the parallel execution just overcome this overhead to provide a minor speedup.
+
+#### Performance and Bottlenecks
+
+The results show that parallelism offered very little performance improvement for this specific task. The primary reason is that the sequential execution time (1.25s on a "cold" run, 0.46s on a "warm" run) is already incredibly fast.
+
+The main bottleneck in this scenario is process overhead, not CPU computation. The time it takes for Python's multiprocessing library to create, start, and coordinate the worker pool is a fixed cost. Since this overhead is almost as large as the entire task (e.g., ~0.3-0.4s), there is very little time left to be "saved" by parallelism. This is a classic "overhead-bound" problem. The 2-worker slowdown is direct proof that the cost of parallelization was greater than its benefit. If the task took 20 seconds instead of 0.46s, this overhead would be negligible, and we would see much higher speedup.
